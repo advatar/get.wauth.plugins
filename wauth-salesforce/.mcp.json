@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "wauth-salesforce": {
+      "type": "http",
+      "url": "https://wauth-salesforce-doorkeeper-774308232885.europe-west2.run.app/mcp",
+      "headers": { "Authorization": "Bearer ${WAUTH_SALESFORCE_KEY}" }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "wauth",
+  "owner": { "name": "WAUTH" },
+  "metadata": {
+    "description": "WAUTH doorkeeper plugins — risk-tiered, human-approved access to GitHub, Stripe, and Salesforce for AI agents. Thin clients over the doorkeeper MCP; the agent never holds a platform credential."
+  },
+  "plugins": [
+    {
+      "name": "wauth-github",
+      "source": "./wauth-github",
+      "description": "GitHub coding-agent actions via the WAUTH GitHub doorkeeper (protected-branch merges → passkey; force-push / CI-bypass / branch-protection / secrets → passkey + iProov liveness)."
+    },
+    {
+      "name": "wauth-stripe",
+      "source": "./wauth-stripe",
+      "description": "Stripe actions via the WAUTH Stripe doorkeeper (passkey + iProov liveness for high-risk)."
+    },
+    {
+      "name": "wauth-salesforce",
+      "source": "./wauth-salesforce",
+      "description": "Salesforce actions via the WAUTH Salesforce doorkeeper (production writes + protected objects escalate to passkey + liveness)."
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "wauth-salesforce",
+  "version": "0.1.0",
+  "description": "Perform Salesforce actions safely through the WAUTH Salesforce doorkeeper — risk-tiered (production writes and protected objects escalate), human-approved (passkey + iProov liveness), executed with credentials the agent never holds.",
+  "author": { "name": "WAUTH", "url": "https://github.com/advatar/WAUTH" },
+  "homepage": "https://github.com/advatar/WAUTH",
+  "repository": "https://github.com/advatar/WAUTH",
+  "license": "Apache-2.0",
+  "keywords": ["salesforce", "crm", "wauth", "doorkeeper", "agent-auth"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}

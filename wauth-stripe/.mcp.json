@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "wauth-stripe": {
+      "type": "http",
+      "url": "https://wauth-stripe-doorkeeper-774308232885.europe-west2.run.app/mcp",
+      "headers": { "Authorization": "Bearer ${WAUTH_STRIPE_KEY}" }
+    }
+  }
+}

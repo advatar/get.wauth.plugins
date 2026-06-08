@@ -1,0 +1,12 @@
+{
+  "name": "wauth-stripe",
+  "version": "0.1.0",
+  "description": "Perform Stripe actions safely through the WAUTH Stripe doorkeeper — risk-tiered, human-approved (passkey + iProov liveness), executed with a credential the agent never holds.",
+  "author": { "name": "WAUTH", "url": "https://github.com/advatar/WAUTH" },
+  "homepage": "https://github.com/advatar/WAUTH",
+  "repository": "https://github.com/advatar/WAUTH",
+  "license": "Apache-2.0",
+  "keywords": ["stripe", "payments", "wauth", "doorkeeper", "agent-auth"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}

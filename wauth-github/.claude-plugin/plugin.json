@@ -1,0 +1,9 @@
+{
+  "name": "wauth-github",
+  "version": "0.1.0",
+  "description": "Perform GitHub coding-agent actions safely through the WAUTH GitHub doorkeeper — risk-tiered, human-approved (passkey + iProov liveness for high-risk), executed with a credential the agent never holds.",
+  "author": { "name": "WAUTH" },
+  "homepage": "https://github.com/advatar/WAUTH",
+  "license": "Apache-2.0",
+  "mcpServers": "./.mcp.json"
+}
