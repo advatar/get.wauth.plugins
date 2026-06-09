@@ -19,6 +19,11 @@
       "name": "wauth-salesforce",
       "source": "./wauth-salesforce",
       "description": "Salesforce actions via the WAUTH Salesforce doorkeeper (production writes + protected objects escalate to passkey + liveness)."
+    },
+    {
+      "name": "wauth-entra",
+      "source": "./wauth-entra",
+      "description": "Microsoft Entra identity actions via the WAUTH Entra doorkeeper (directory reads free; MFA reset / privileged role grant → passkey + iProov liveness)."
     }
   ]
 }

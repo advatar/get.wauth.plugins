@@ -1,0 +1,9 @@
+{
+  "name": "wauth-entra",
+  "version": "0.1.0",
+  "description": "Govern AI-agent actions on Microsoft Entra (identity control plane) through the WAUTH Entra doorkeeper — directory reads are free; MFA reset / password reset / privileged role grant require passkey + iProov liveness; the agent never holds a Graph credential.",
+  "author": { "name": "WAUTH" },
+  "homepage": "https://github.com/advatar/WAUTH",
+  "license": "Apache-2.0",
+  "mcpServers": "./.mcp.json"
+}

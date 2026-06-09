@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "wauth-entra": {
+      "type": "http",
+      "url": "https://wauth-entra-doorkeeper-774308232885.europe-west2.run.app/mcp",
+      "headers": { "Authorization": "Bearer ${WAUTH_ENTRA_KEY}" }
+    }
+  }
+}
