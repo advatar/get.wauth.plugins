@@ -43,5 +43,14 @@ Always trust the `tier` that `plan_action` returns; never infer it yourself.
 - **412** → the principal isn't enrolled yet (passkey/biometric). The operator must enrol first.
 - **Approval pending** → keep polling `get_plan`; don't retry `execute_authorised_action` until the capability is minted.
 
+## Secure run — box the agent (operator setup)
+For a hostile-agent threat model, launch this agent inside the hardened container in `secure-run/`
+(`secure-run/run.sh`): it mounts **only the repo** and drops `$HOME`, `~/.ssh`, the `gh` token, the
+SSH-agent socket and cloud creds; runs non-root + read-only; and lets the box reach only the
+doorkeeper, the model API, and package registries. Then the doorkeeper isn't just the *sanctioned*
+path to a GitHub write — it's the only *reachable* one (you hold no GitHub credential and there's no
+ambient host secret to steal). The container is the enforcement; this skill is only the bootstrap.
+See `secure-run/README.md`.
+
 > Connection details and the full tool list live in the doorkeeper's `CONNECT.md` / `MCP.md`.
 > The trust model is `THREAT-MODEL.md` (the doorkeeper must be a different trust domain than you).
