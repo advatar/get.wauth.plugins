@@ -69,7 +69,9 @@ fi
 echo "▶ boxing the agent (Tier A — macOS Seatbelt, no Docker)"
 echo "    workspace:  $WORKSPACE  (the only home-dir path the agent can read/write freely)"
 echo "    doorkeeper: $DOORKEEPER_URL  (only sanctioned + only reachable GitHub write path)"
-echo "    UNREADABLE: ~/.ssh, ~/.config/gh, ~/.aws, ~/.gnupg, ~/.kube, Keychains — all of \$HOME except the workspace + the agent's own dirs"
+echo "    UNREADABLE: ~/.ssh, ~/.config/gh, ~/.aws, ~/.config/gcloud, ~/.azure, ~/.gnupg, ~/.kube, Keychains"
+echo "               — all of \$HOME except the workspace + the agent's own dirs. Cloud CLIs (gcloud/aws/az)"
+echo "               can't auth here, so 'gcloud secrets access …' cannot exfiltrate platform secrets."
 [ -n "${HTTPS_PROXY:-}" ] && echo "    egress proxy: $HTTPS_PROXY (allow-list it to the doorkeeper + model + registries)"
 
 export WAUTH_DOORKEEPER_URL="$DOORKEEPER_URL"

@@ -59,9 +59,16 @@ OPENAI_API_KEY="<a scoped model key>" \
 **What it enforces** (verified on macOS, `sandbox-exec`):
 
 - **Default-deny *reads* across `$HOME`** — `~/.ssh`, the `gh` token (`~/.config/gh`), `~/.aws`,
-  `~/.gnupg`, `~/.kube`, `~/.azure`, `~/Library/Keychains`, and any *unenumerated* secret under home
-  are unreadable. Re-allowed: the workspace, the agent's own `~/.codex`/`~/.claude`, and non-secret
-  dev toolchains (`~/.nvm`, `~/.cargo`, `~/.pyenv`, …) so the agent and its runtime still work.
+  the **cloud-CLI credentials** (`~/.config/gcloud`, `~/.azure`), `~/.gnupg`, `~/.kube`,
+  `~/Library/Keychains`, and any *unenumerated* secret under home are unreadable. Re-allowed: the
+  workspace, the agent's own `~/.codex`/`~/.claude`, and non-secret dev toolchains (`~/.nvm`,
+  `~/.cargo`, `~/.pyenv`, …) so the agent and its runtime still work.
+- **Cloud CLIs can't run or authenticate.** Because cloud credentials live under `$HOME` — and the
+  CLI binaries often do too (e.g. `~/bin/google-cloud-sdk`) — a boxed agent cannot run
+  `gcloud secrets versions access …`, `aws secretsmanager get-secret-value …`, or `az keyvault …`
+  to exfiltrate platform secrets: the credential is unreadable and, when the CLI lives under home,
+  it won't even exec. Verified: `gcloud secrets versions access` inside the box fails with
+  `Operation not permitted`.
 - **Deny *writes*** to the cheapest persistence vectors — `~/.ssh` (no planting an `authorized_key`),
   `~/Library/LaunchAgents`, and the shell-init files (`~/.zshrc`, `~/.bashrc`, …).
 - The workspace is fully read/write; network and the system toolchain work normally.
