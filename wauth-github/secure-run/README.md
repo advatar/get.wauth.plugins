@@ -10,6 +10,17 @@ It is the answer to a simple question: *if the agent is hostile or prompt-inject
 actually reach?* In the box: the repo, the model API, the doorkeeper, package registries — and
 nothing else.
 
+## Three ways to box it — pick by trust level + platform
+
+| | What it is | Boundary | Use when |
+|---|---|---|---|
+| **Tier A** | macOS Seatbelt sandbox (`sandbox-exec`), **no Docker** — [`seatbelt/`](./seatbelt) | kernel sandbox profile: secrets unreadable, persistence vectors unwritable | macOS, semi-trusted agent, you want zero friction on your real toolchain |
+| **Tier B** | hardened container — [`run.sh`](./run.sh) + [`Dockerfile`](./Dockerfile) | container/VM: the secret is simply **not mounted** | any OS, hostile-agent case, you want "YOLO in a sandbox" |
+| **Tier C** | the **doorkeeper** itself | trust-domain split: the protected credential is **never on the box** | always — A/B layer *under* it |
+
+Tier C is always on (it's WAUTH). Tiers A and B are the runtime-containment layer that decides how
+much an on-box agent can touch. Pick A for frictionless macOS, B when you assume the agent is hostile.
+
 ## Why a box at all — the threat WAUTH alone doesn't cover
 
 A local coding agent runs as **you**, with **your** filesystem. Without a box it can read
@@ -32,13 +43,51 @@ lets the agent *propose*; it cannot bypass approval, cannot fetch the GitHub tok
 fleet-wide. So you never put a git push token (or `~/.ssh`) in the box to "make it useful" — the
 doorkeeper performs the write.
 
-## Allow-list, not deny-list
+## Tier A — macOS Seatbelt (no Docker)
 
-The box doesn't *deny* `~/.ssh` — it never mounts it. Only the repo is mounted; `$HOME`,
+The frictionless tier: the agent runs on your **real machine** with your real toolchain, inside an
+Apple Seatbelt sandbox ([`seatbelt/wauth-agent.sb`](./seatbelt/wauth-agent.sb)) that makes the
+host's credential stores **unreadable** and the key persistence vectors **unwritable**.
+
+```sh
+WAUTH_GITHUB_KEY="<least-privilege doorkeeper agent key>" \
+OPENAI_API_KEY="<a scoped model key>" \
+  ./secure-run/seatbelt/secure-run-seatbelt.sh /path/to/your/repo -- codex
+# (no command after -- → an interactive shell inside the sandbox; then run `codex` / `claude`)
+```
+
+**What it enforces** (verified on macOS, `sandbox-exec`):
+
+- **Default-deny *reads* across `$HOME`** — `~/.ssh`, the `gh` token (`~/.config/gh`), `~/.aws`,
+  `~/.gnupg`, `~/.kube`, `~/.azure`, `~/Library/Keychains`, and any *unenumerated* secret under home
+  are unreadable. Re-allowed: the workspace, the agent's own `~/.codex`/`~/.claude`, and non-secret
+  dev toolchains (`~/.nvm`, `~/.cargo`, `~/.pyenv`, …) so the agent and its runtime still work.
+- **Deny *writes*** to the cheapest persistence vectors — `~/.ssh` (no planting an `authorized_key`),
+  `~/Library/LaunchAgents`, and the shell-init files (`~/.zshrc`, `~/.bashrc`, …).
+- The workspace is fully read/write; network and the system toolchain work normally.
+
+**Default-deny-read, scoped to `$HOME`.** This is the [neko-kai/claude-code-sandbox](https://github.com/neko-kai/claude-code-sandbox)
+"noread" model (deny reads by default, allow-list what's needed) — *but scoped to the home directory
+rather than `/`*, because a from-scratch `(deny default)` profile reliably breaks macOS's outbound
+network plumbing (the well-known Seatbelt rabbit hole). Scoping the read-deny to `$HOME` keeps the
+network/system stack working while still **failing closed**: an unknown dotfile under home is denied
+until you explicitly allow it — which a deny-list of named secret paths can never guarantee. Egress
+allow-listing is layered separately via `HTTPS_PROXY` (see below), after
+[michaelneale/agent-seatbelt-sandbox](https://github.com/michaelneale/agent-seatbelt-sandbox).
+
+> Trade-off, stated plainly: if a tool lives under `$HOME` in a dir the profile doesn't re-allow,
+> it gets a read error — the **fail-closed** direction (a functionality gap, never a silent
+> exposure). Add the dir to the re-allow block in `wauth-agent.sb`; never add a credential dir.
+> `sandbox-exec(1)` is deprecated-but-functional and SBPL can shift between macOS releases — Tier A
+> is the *semi-trusted* tier. For a hostile agent, use Tier B or rely on Tier C.
+
+## Allow-list, not deny-list (Tier B)
+
+The container doesn't *deny* `~/.ssh` — it never mounts it. Only the repo is mounted; `$HOME`,
 `~/.config/gh`, cloud creds, and the SSH-agent socket are simply absent. That's strictly more robust
 than enumerating sensitive paths to block (you can never enumerate them all).
 
-## Use it
+## Tier B — use it (hardened container)
 
 ```sh
 # 1) Build the box image (pick your agent):
@@ -91,3 +140,8 @@ all Linux capabilities dropped (`--cap-drop ALL`), no privilege escalation
   your container runtime.
 - This is the **bootstrap + enforcement**, not the policy: the doorkeeper still decides tiers and
   demands the human step-up. The box only guarantees the doorkeeper is the *only door*.
+- **Tier A (Seatbelt) is the semi-trusted tier, not a hostile-agent jail.** It read-protects secrets
+  and blocks the cheap persistence writes, but the agent still shares your kernel and network namespace,
+  and `sandbox-exec` is a deprecated (if functional) interface whose behaviour can change between macOS
+  releases. If you must assume the agent is actively hostile, use Tier B (container) or rely on Tier C
+  (the credential is never on the box). Tiers compose — run A *and* C, or B *and* C.
