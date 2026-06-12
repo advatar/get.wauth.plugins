@@ -130,6 +130,37 @@ Allow only: your doorkeeper host, `api.openai.com` (or `api.anthropic.com`), and
 registries you need. Everything else — including a direct hop to `api.github.com` — is then blocked
 at the network layer, not by the agent's goodwill.
 
+## Test the box (adversarial probes)
+
+Don't take the containment on faith — run the probe harnesses. Each launches a battery of
+"hostile agent" attempts *inside* the box and asserts every one is contained (and that normal work
+still functions). Exit 0 = fully contained; non-zero = a leak/escape, with the offending probe named.
+
+```sh
+# Tier A (macOS Seatbelt) — no Docker needed, runs in seconds:
+./secure-run/seatbelt/test-seatbelt-box.sh
+
+# Tier B (container) — builds the box image on first run, then probes it:
+./secure-run/test-container-box.sh
+```
+
+What they assert:
+- **Reads denied** — `~/.ssh`, the `gh` token, `~/.aws`, `~/.config/gcloud`, Keychains, **and an
+  unenumerated decoy secret planted in `$HOME`** (proving Tier A's default-deny-read catches secrets
+  no deny-list names). A read-probe only counts when the file is genuinely readable on the host
+  first, so "denied" means the box blocked a *real* secret, not an absent file.
+- **Persistence-writes denied** — planting an `authorized_key` / a LaunchAgent (Tier A); read-only
+  rootfs + no host mounts (Tier B). Write-probes use throwaway canary names so a hypothetical escape
+  can't clobber a real dotfile.
+- **Cloud-CLI exfiltration denied** — `gcloud secrets versions access …` can't run or authenticate
+  in the box.
+- **Containment holds without breaking work** — workspace read/write, system reads, and the node
+  toolchain still function; Tier B additionally checks non-root, dropped caps, and no-egress under
+  `--network none` (the proxy allow-list enforces the rest).
+
+Run them in CI against any change to the profile/launcher/Dockerfile — a regression that opens a hole
+turns the exit code red.
+
 ## Hardening the launcher already applies
 
 Non-root (`--user 1000:1000`), read-only rootfs (`--read-only`) with throwaway tmpfs `HOME`/`/tmp`,
