@@ -1,0 +1,12 @@
+{
+  "name": "wauth-saas-jit",
+  "version": "0.1.0",
+  "description": "Request just-in-time, time-limited SaaS access for an AI agent through the WAUTH SaaS JIT control plane (AFPS) — reads are free; a production grant needs a human passkey, a privileged/admin grant needs passkey + iProov liveness; the grant is auto-revoked and reconciled, and the agent never holds the provisioned credential.",
+  "author": { "name": "WAUTH", "url": "https://github.com/advatar/WAUTH" },
+  "homepage": "https://github.com/advatar/WAUTH",
+  "repository": "https://github.com/advatar/WAUTH",
+  "license": "Apache-2.0",
+  "keywords": ["saas", "jit", "just-in-time", "afps", "provisioning", "wauth", "doorkeeper", "agent-auth"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}

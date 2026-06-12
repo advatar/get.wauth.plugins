@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "wauth-saas-jit": {
+      "type": "http",
+      "url": "https://wauth-saas-jit-control-plane-774308232885.europe-west2.run.app/mcp",
+      "headers": { "Authorization": "Bearer ${WAUTH_SAAS_JIT_KEY}" }
+    }
+  }
+}

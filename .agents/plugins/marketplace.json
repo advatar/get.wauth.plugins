@@ -24,6 +24,11 @@
       "name": "wauth-entra",
       "source": "./wauth-entra",
       "description": "Microsoft Entra identity actions via the WAUTH Entra doorkeeper (directory reads free; MFA reset / privileged role grant → passkey + iProov liveness)."
+    },
+    {
+      "name": "wauth-saas-jit",
+      "source": "./wauth-saas-jit",
+      "description": "Just-in-time, time-limited SaaS access via the WAUTH SaaS JIT control plane (AFPS) — production grant → passkey; privileged/admin or contained-token mode → passkey + iProov liveness; auto-revoked + reconciled, agent never holds the credential."
     }
   ]
 }
