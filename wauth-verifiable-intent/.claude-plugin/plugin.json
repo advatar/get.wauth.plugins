@@ -1,0 +1,9 @@
+{
+  "name": "wauth-verifiable-intent",
+  "version": "0.1.0",
+  "description": "Govern AI-agent commerce through the WAUTH Verifiable-Intent doorkeeper — the agent presents a signed Verifiable-Intent mandate (the human's pre-authorised merchant, amount ceiling, item and validity); the doorkeeper verifies the order is inside that envelope and applies the merchant lock. Reads/quotes are free; placing an order within the mandate needs a passkey; over-threshold, a new payee, or a missing/invalid mandate needs passkey + iProov liveness. The agent never holds a payment credential.",
+  "author": { "name": "WAUTH" },
+  "homepage": "https://github.com/advatar/WAUTH",
+  "license": "Apache-2.0",
+  "mcpServers": "./.mcp.json"
+}

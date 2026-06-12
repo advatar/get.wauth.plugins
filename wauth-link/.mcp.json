@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "wauth-link": {
+      "type": "http",
+      "url": "https://wauth-link-doorkeeper-2gubw2pinq-nw.a.run.app/mcp",
+      "headers": { "Authorization": "Bearer ${WAUTH_LINK_KEY}" }
+    }
+  }
+}

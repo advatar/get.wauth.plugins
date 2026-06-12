@@ -1,0 +1,9 @@
+{
+  "name": "wauth-digital-credentials",
+  "version": "0.1.0",
+  "description": "Govern AI-agent wallet-credential presentment through the WAUTH Digital-Credentials doorkeeper — the agent presents a digital credential (Apple Wallet / Digital Credentials API / mdoc / EUDI) bound via HAPP; the doorkeeper verifies the presentation (issuer-signed, holder-bound, aud/nonce-bound, unexpired) and issues scoped authority. Reading accepted types is free; a standard credential needs a passkey; a high-assurance identity / age / KYC / government-ID presentation — or a failed holder binding — needs passkey + iProov liveness. The agent never holds the raw credential.",
+  "author": { "name": "WAUTH" },
+  "homepage": "https://github.com/advatar/WAUTH",
+  "license": "Apache-2.0",
+  "mcpServers": "./.mcp.json"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "wauth-link",
+  "version": "0.1.0",
+  "description": "Link a payment key to an AI agent under a WAUTH merchant lock through the WAUTH Link doorkeeper, then pay against it. The doorkeeper holds the key server-side; the agent proposes payments and never sees the key. Reading the linked instrument is free; paying a known destination within threshold needs a passkey; linking a new key, paying a new destination, or any over-threshold/bulk payment needs passkey + iProov liveness.",
+  "author": { "name": "WAUTH" },
+  "homepage": "https://github.com/advatar/WAUTH",
+  "license": "Apache-2.0",
+  "mcpServers": "./.mcp.json"
+}

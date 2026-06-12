@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "wauth-digital-credentials": {
+      "type": "http",
+      "url": "https://wauth-digital-credentials-doorkeeper-2gubw2pinq-nw.a.run.app/mcp",
+      "headers": { "Authorization": "Bearer ${WAUTH_DCRED_KEY}" }
+    }
+  }
+}

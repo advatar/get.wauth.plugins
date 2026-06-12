@@ -29,6 +29,21 @@
       "name": "wauth-saas-jit",
       "source": "./wauth-saas-jit",
       "description": "Just-in-time, time-limited SaaS access via the WAUTH SaaS JIT control plane (AFPS) — production grant → passkey; privileged/admin or contained-token mode → passkey + iProov liveness; auto-revoked + reconciled, agent never holds the credential."
+    },
+    {
+      "name": "wauth-verifiable-intent",
+      "source": "./wauth-verifiable-intent",
+      "description": "Intent-bound commerce via the WAUTH Verifiable-Intent doorkeeper — the agent presents a signed Verifiable-Intent mandate (merchant, amount ceiling, item, validity) and the doorkeeper verifies the order is inside that envelope under a merchant lock. Reads free; order within the mandate → passkey; over-threshold / new payee / missing-or-invalid mandate → passkey + iProov liveness; agent never holds a payment credential."
+    },
+    {
+      "name": "wauth-digital-credentials",
+      "source": "./wauth-digital-credentials",
+      "description": "Wallet-credential presentment via the WAUTH Digital-Credentials doorkeeper (Apple Wallet / Digital Credentials API / mdoc / EUDI) — the doorkeeper verifies the presentation (issuer-signed, holder-bound, aud/nonce-bound, unexpired) and issues scoped authority. Reading accepted types free; standard credential → passkey; high-assurance identity / age / KYC / government-ID or failed binding → passkey + iProov liveness; agent never holds the raw credential."
+    },
+    {
+      "name": "wauth-link",
+      "source": "./wauth-link",
+      "description": "Link a payment key to an agent under a WAUTH merchant lock via the WAUTH Link doorkeeper, then pay against it. Reading the instrument free; payment to a known destination within threshold → passkey; new key / new destination / over-threshold → passkey + iProov liveness. Live-vs-sandbox is server-authoritative; the agent never sees the key."
     }
   ]
 }
